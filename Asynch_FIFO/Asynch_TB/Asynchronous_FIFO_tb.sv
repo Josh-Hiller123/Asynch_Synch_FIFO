@@ -113,12 +113,13 @@ end
 else 
 $display("SUCCESS: Full flag detected!");
 
-// Might delete
 if (!almostfull_tb)
 begin
     $display("ERROR: almost full flag not detected at time %t", $time);
     errors = errors + 1;
 end
+else 
+$display("SUCCESS: almost full flag detected!");
 
 @(negedge wclk_tb);
 $display("Writing to full FIFO, expect NOTES..."); 
@@ -213,7 +214,7 @@ begin
     errors = errors + 1;
 end
 else 
-$display("SUCCESS: Almost full flag detected after reading from empty FIFO!");
+ $display("SUCCESS: Almost empty flag detected after reading from empty FIFO!");
 
 endtask
 
