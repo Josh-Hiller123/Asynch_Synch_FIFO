@@ -19,11 +19,13 @@ The testbench for the asynchronous FIFO uses an active monitor and scoreboard to
 
 ## Waveform 
 Below are the waveforms obtained through GTKWave. The first image shows the waveform of the stimulus filling the FIFO the minimum amounts needed to trigger the almost full flag, then the full flag, then finally writes to a full FIFO. There are momentary pauses between each of these steps for error checks in the testbench.
+
 <img width="796" height="221" alt="Screenshot 2026-06-27 220647" src="https://github.com/user-attachments/assets/83634074-5f97-44ab-ba48-5ea1b7215bb2" />
 
 **Notice the delays.** When write enable (w_enable) goes high, there's a substantial delay before the synchronized write pointer (g_wptr_synch) activates, and an even longer delay before the empty flag drops. This highlights the built-in latency of the asynchronous FIFO and the source of our conservative estimates. The d-flip-flops in our synchronizer means the write pointer requires two read-clock cycles to become synchronized. Only after it has propagated through the synchronizer to the read domain can our empty flag be calculated and finally drop on the third positive read-clock edge. Note that empty is calculated combinationally after two read-clock cycles, but we update the empty flag synchronously on the third cycle to ensure all bits are stable and update reliably on the clock edge. This exact process explains why our empty/almost-empty flags drop late and our full/almost-full flags trigger early. The read domain always thinks the FIFO is more full than it is, while the write domain always thinks the FIFO is less empty than it is.
 
-<img width="794" height="219" alt="Screenshot 2026-06-27 220936" src="https://github.com/user-attachments/assets/eab6bc5b-1b68-4d39-8d36-e9591ea596be" />
+<img width="794" height="219" alt="Screenshot 2026-06-27 220936" src="https://github.com/user-attachments/assets/9b02c1a9-f89b-4da0-b305-96fb78df9a29" />
+
 This second image shows the waveform of the stimulus emptying the FIFO the minimum amounts needed to trigger the almost empty flag, then the empty flag, then reads from an empty FIFO. Once again, there are momentary pauses between each. You will notice a similar latency as the previous waveform.
 
 
