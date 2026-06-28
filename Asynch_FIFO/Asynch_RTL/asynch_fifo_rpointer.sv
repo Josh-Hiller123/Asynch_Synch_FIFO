@@ -44,7 +44,7 @@ assign w_empty = (g_rptr_next == g_wptr_synch);
 assign w_fill_level = b_wptr_synch - b_rptr_next;
 assign w_almostempty = (w_fill_level <= ALMOST_EMPTY);
 
-gray_to_binary #(.ADDR_WIDTH(ADDR_WIDTH)) g_rptr_conversion (
+    gray_to_binary #(.ADDR_WIDTH(ADDR_WIDTH)) g_wptr_conversion (
 .i_din(g_wptr_synch), 
 .o_dout(b_wptr_synch)
 );
